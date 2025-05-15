@@ -16,6 +16,11 @@ defmodule Noted.Application do
       {Finch, name: Noted.Finch},
       # Start a worker by calling: Noted.Worker.start_link(arg)
       # {Noted.Worker, arg},
+
+      # Start the SSR process pool
+      # You must specify a `path` option to locate the directory where the `ssr.js` file lives.
+      {Inertia.SSR, path: Path.join([Application.app_dir(:noted), "priv"])},
+
       # Start to serve requests, typically the last entry
       NotedWeb.Endpoint,
       {AshAuthentication.Supervisor, [otp_app: :noted]}

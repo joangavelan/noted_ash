@@ -35,3 +35,5 @@ noted-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Ignore generated SSR JavaScript file.
+/priv/ssr.js

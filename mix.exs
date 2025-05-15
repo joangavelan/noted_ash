@@ -67,7 +67,8 @@ defmodule Noted.MixProject do
       {:gettext, "~> 0.26"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:inertia, "~> 2.4.0"}
     ]
   end
 
@@ -84,10 +85,11 @@ defmodule Noted.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ash.setup --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind noted", "esbuild noted"],
+      "assets.build": ["tailwind noted", "esbuild noted", "esbuild ssr"],
       "assets.deploy": [
         "tailwind noted --minify",
         "esbuild noted --minify",
+        "esbuild ssr",
         "phx.digest"
       ],
       "phx.routes": ["phx.routes", "ash_authentication.phoenix.routes"]

@@ -26,7 +26,8 @@ config :noted, NotedWeb.Endpoint,
   secret_key_base: "zN8mO0ZK7MobnNqxlH9nWE7bqtzKWxBZJXr+ohd54hwDYmz8qMIekDqZUelU8KoB",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:noted, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:noted, ~w(--watch)]}
+    tailwind: {Tailwind, :install_and_run, [:noted, ~w(--watch)]},
+    ssr: {Esbuild, :install_and_run, [:ssr, ~w(--sourcemap=inline --watch)]}
   ]
 
 # ## SSL Support

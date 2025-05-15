@@ -28,6 +28,7 @@ defmodule NotedWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import NotedWeb.ConnCase
+      import Inertia.Testing
     end
   end
 
