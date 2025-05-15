@@ -90,8 +90,6 @@ defmodule NotedWeb do
 
       # HTML escaping functionality
       import Phoenix.HTML
-      # Core UI components
-      import NotedWeb.CoreComponents
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
