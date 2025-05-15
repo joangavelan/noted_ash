@@ -3,6 +3,6 @@ defmodule NotedWeb.PageControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")
-    assert inertia_component(conn) == "home"
+    assert inertia_component(conn) == "Home"
   end
 end

@@ -4,6 +4,6 @@ defmodule NotedWeb.PageController do
   def home(conn, _params) do
     conn
     |> assign_prop(:text, "Hello World")
-    |> render_inertia("home")
+    |> render_inertia("Home")
   end
 end
