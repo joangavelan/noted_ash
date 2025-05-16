@@ -1,2 +1,26 @@
 @import "tailwindcss" source("../..");
 @plugin "daisyui";
+
+h1 {
+  @apply text-2xl font-semibold;
+}
+
+h2 {
+  @apply text-xl font-semibold;
+}
+
+.form {
+  @apply w-84 flex flex-col gap-2.5;
+}
+
+.form-field {
+  @apply flex flex-col gap-2;
+}
+
+.input {
+  @apply w-full;
+}
+
+.link {
+  @apply w-max;
+}

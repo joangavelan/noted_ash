@@ -37,3 +37,6 @@ npm-debug.log
 
 # Ignore generated SSR JavaScript file.
 /priv/ssr.js
+
+# Ignore .env file
+.env
