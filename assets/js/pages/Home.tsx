@@ -1,16 +1,14 @@
-import { Head } from "@inertiajs/react"
+import { Layout } from "@/layouts/Layout"
+import { Link } from "@inertiajs/react"
 
-interface Props {
-  text: string
-}
-
-export default function Home({ text }: Props) {
+export default function Home() {
   return (
-    <>
-      <Head title="Home" />
+    <Layout title="Home">
+      <h1>Noted</h1>
 
-      <p className="text-lg text-green-500">{text}</p>
-      <button className="btn btn-primary">Button</button>
-    </>
+      <Link href="/app" as="button" className="btn">
+        Go to main application
+      </Link>
+    </Layout>
   )
 }

@@ -63,6 +63,12 @@ config :noted, NotedWeb.Endpoint,
     ]
   ]
 
+# OAuth2 Google config
+config :noted,
+  google_client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  google_client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
+  google_redirect_uri: System.get_env("GOOGLE_REDIRECT_URI")
+
 # Enable dev routes for dashboard and mailbox
 config :noted, dev_routes: true, token_signing_secret: "Nw41AZ7zo2H1Wt2KpBkZhsATQbB8iUOs"
 
