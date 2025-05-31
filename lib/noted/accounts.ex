@@ -9,6 +9,7 @@ defmodule Noted.Accounts do
       define :register_with_password
       define :register_with_google
       define :sign_in_with_password
+      define :search_users
     end
   end
 end

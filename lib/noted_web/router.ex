@@ -2,6 +2,7 @@ defmodule NotedWeb.Router do
   use NotedWeb, :router
 
   import NotedWeb.UserAuth
+  import NotedWeb.TenantAuth
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -39,7 +40,30 @@ defmodule NotedWeb.Router do
   scope "/", NotedWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    get "/app", AppController, :index
+    get "/portal", PortalController, :index
+    get "/teams/new", WorkspaceController, :new
+    post "/teams", WorkspaceController, :create
+    post "/enter-workspace", WorkspaceController, :enter
+    delete "/decline-invitation", WorkspaceController, :decline_invitation
+    post "/accept-invitation", WorkspaceController, :accept_invitation
+  end
+
+  scope "/workspace", NotedWeb do
+    pipe_through [
+      :browser,
+      :require_authenticated_user,
+      :ensure_tenant,
+      :load_user_role,
+      :set_permissions
+    ]
+
+    get "/", WorkspaceController, :show
+    get "/search-users", WorkspaceController, :search_users
+    post "/invite-user", WorkspaceController, :invite_user
+    delete "/cancel-invitation", WorkspaceController, :cancel_invitation
+    delete "/remove-team-member", WorkspaceController, :remove_team_member
+    delete "/leave-team", WorkspaceController, :leave_team
+    delete "/delete-team", WorkspaceController, :delete_team
   end
 
   scope "/", NotedWeb do

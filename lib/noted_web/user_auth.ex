@@ -17,7 +17,7 @@ defmodule NotedWeb.UserAuth do
     conn
     |> AshAuthentication.Phoenix.Plug.store_in_session(user)
     |> put_flash(:success, "Welcome back!")
-    |> redirect(to: ~p"/app")
+    |> redirect(to: ~p"/portal")
   end
 
   def log_out(conn) do
@@ -41,7 +41,7 @@ defmodule NotedWeb.UserAuth do
   def redirect_if_user_is_authenticated(conn, _opts) do
     if conn.assigns[:current_user] do
       conn
-      |> redirect(to: ~p"/app")
+      |> redirect(to: ~p"/portal")
       |> halt()
     else
       conn

@@ -245,6 +245,21 @@ defmodule Noted.Accounts.User do
       # Generates an authentication token for the user
       change AshAuthentication.GenerateTokenChange
     end
+
+    read :search_users do
+      argument :search, :string, default: ""
+
+      filter expr(
+               contains(
+                 string_downcase(name),
+                 string_downcase(^arg(:search))
+               ) and
+                 id != ^actor(:id)
+             )
+
+      prepare build(load: :membership_status)
+      prepare build(limit: 5)
+    end
   end
 
   policies do
@@ -252,8 +267,9 @@ defmodule Noted.Accounts.User do
       authorize_if always()
     end
 
-    policy always() do
-      forbid_if always()
+    policy action_type(:read) do
+      authorize_if relates_to_actor_via([:teams, :users])
+      authorize_if actor_attribute_equals(:role, "admin")
     end
   end
 
@@ -281,6 +297,31 @@ defmodule Noted.Accounts.User do
     end
 
     attribute :confirmed_at, :utc_datetime_usec
+  end
+
+  relationships do
+    many_to_many :teams, Noted.Workspace.Team do
+      through Noted.Workspace.TeamMember
+      join_relationship :team_membership
+    end
+
+    has_many :invitations, Noted.Workspace.Invitation do
+      destination_attribute :invited_user_id
+    end
+  end
+
+  calculations do
+    calculate :role, :string, expr(team_membership.role)
+
+    calculate :membership_status,
+              :string,
+              expr(
+                cond do
+                  not is_nil(role) -> "#{role}"
+                  not is_nil(invitations.invited_user_id) -> "invited"
+                  true -> nil
+                end
+              )
   end
 
   identities do

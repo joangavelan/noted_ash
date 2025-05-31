@@ -48,7 +48,7 @@ config :spark,
 config :noted,
   ecto_repos: [Noted.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [Noted.Accounts]
+  ash_domains: [Noted.Accounts, Noted.Workspace]
 
 # Configures the endpoint
 config :noted, NotedWeb.Endpoint,

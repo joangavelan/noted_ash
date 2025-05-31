@@ -1,6 +1,7 @@
 import { createInertiaApp } from "@inertiajs/react"
 import axios from "axios"
 import { hydrateRoot } from "react-dom/client"
+import { TanstackQueryProvider } from "./lib/tanstack-query"
 
 axios.defaults.xsrfHeaderName = "x-csrf-token"
 
@@ -10,6 +11,12 @@ createInertiaApp({
     return await import(`./pages/${name}.tsx`)
   },
   setup({ App, el, props }) {
-    hydrateRoot(el, <App {...props} />)
+    const appElement = (
+      <TanstackQueryProvider>
+        <App {...props} />
+      </TanstackQueryProvider>
+    )
+
+    hydrateRoot(el, appElement)
   }
 })

@@ -6,7 +6,7 @@ export default function Home() {
     <Layout title="Home">
       <h1>Noted</h1>
 
-      <Link href="/app" as="button" className="btn">
+      <Link href="/portal" as="button" className="btn">
         Go to main application
       </Link>
     </Layout>
