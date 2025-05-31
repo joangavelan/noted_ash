@@ -18,7 +18,13 @@ defmodule Noted.Accounts.User do
         confirm_on_update? false
         require_interaction? true
         confirmed_at_field :confirmed_at
-        auto_confirm_actions [:sign_in_with_magic_link, :reset_password_with_token]
+
+        auto_confirm_actions [
+          :sign_in_with_magic_link,
+          :reset_password_with_token,
+          :register_with_google
+        ]
+
         sender Noted.Accounts.User.Senders.SendNewUserConfirmationEmail
       end
     end
@@ -58,7 +64,7 @@ defmodule Noted.Accounts.User do
   end
 
   actions do
-    defaults [:read]
+    defaults [:read, :update]
 
     create :register_with_google do
       argument :user_info, :map, allow_nil?: false
@@ -68,9 +74,6 @@ defmodule Noted.Accounts.User do
 
       change AshAuthentication.GenerateTokenChange
 
-      # Required if you have the `identity_resource` configuration enabled.
-      # change AshAuthentication.Strategy.OAuth2.IdentityChange
-
       change fn changeset, _ ->
         user_info = Ash.Changeset.get_argument(changeset, :user_info)
 
@@ -79,17 +82,6 @@ defmodule Noted.Accounts.User do
           Map.take(user_info, ["email", "name", "picture"])
         )
       end
-
-      # Required if you're using the password & confirmation strategies
-      upsert_fields []
-      change set_attribute(:confirmed_at, &DateTime.utc_now/0)
-
-      change after_action(fn _changeset, user, _context ->
-               case user.confirmed_at do
-                 nil -> {:error, "Unconfirmed user exists already"}
-                 _ -> {:ok, user}
-               end
-             end)
     end
 
     read :get_by_subject do

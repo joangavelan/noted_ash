@@ -28,6 +28,10 @@ defmodule NotedWeb.Router do
     post "/register", UserRegistrationController, :create
     get "/login", UserSessionController, :new
     post "/login", UserSessionController, :create
+    get "/confirm-new-user/:token", UserConfirmationController, :edit
+    put "/confirm-new-user/:token", UserConfirmationController, :update
+    get "/confirm-new-user", UserConfirmationController, :new
+    post "/confirm-new-user", UserConfirmationController, :create
   end
 
   scope "/auth", NotedWeb do
