@@ -64,6 +64,7 @@ defmodule NotedWeb.Router do
     get "/", WorkspaceController, :show
     get "/search-users", WorkspaceController, :search_users
     post "/invite-user", WorkspaceController, :invite_user
+    put "/change-member-role", WorkspaceController, :change_role
     delete "/cancel-invitation", WorkspaceController, :cancel_invitation
     delete "/remove-team-member", WorkspaceController, :remove_team_member
     delete "/leave-team", WorkspaceController, :leave_team

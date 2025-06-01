@@ -1,5 +1,6 @@
 import { Back } from "@/components/Back"
 import { CancelInvitationButton } from "@/components/CancelInvitationButton"
+import { ChangeMemberRole } from "@/components/ChangeMemberRole"
 import { DeleteTeamButton } from "@/components/DeleteTeamButton"
 import { InviteUserInput } from "@/components/InviteUserInput"
 import { LeaveTeamButton } from "@/components/LeaveTeamButton"
@@ -29,13 +30,18 @@ export default function Workspace({ current_team, team_members, invitations_sent
         <h2>Members</h2>
 
         <ul className="flex flex-col">
-          {team_members.map(({ id, name, role, can_remove }) => (
+          {team_members.map(({ id, name, role, can_manage }) => (
             <li key={id} className="flex items-center gap-2.5">
               <p>
                 {name} - {role}
               </p>
 
-              {can_remove && <RemoveTeamMemberButton memberId={id} />}
+              {can_manage && (
+                <div className="flex items-center gap-2.5">
+                  <ChangeMemberRole memberId={id} currentRole={role} />
+                  <RemoveTeamMemberButton memberId={id} />
+                </div>
+              )}
             </li>
           ))}
         </ul>

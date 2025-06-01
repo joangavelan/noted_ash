@@ -38,7 +38,7 @@ defmodule NotedWeb.WorkspaceController do
 
     team_members =
       Workspace.list_team_members!(
-        load: [:can_remove_team_member],
+        load: [:can_manage],
         actor: current_user,
         tenant: current_team
       )
@@ -72,6 +72,26 @@ defmodule NotedWeb.WorkspaceController do
       {:error, _error} ->
         conn
         |> put_flash(:error, "An error occurred while sending the invitation.")
+        |> redirect(to: ~p"/workspace")
+    end
+  end
+
+  def change_role(conn, params) do
+    current_user = conn.assigns.current_user
+    current_team = conn.assigns.current_team
+
+    case Workspace.change_member_role(params["member_id"], %{role: params["role"]},
+           actor: current_user,
+           tenant: current_team
+         ) do
+      {:ok, _member} ->
+        conn
+        |> put_flash(:success, "Member role updated!")
+        |> redirect(to: ~p"/workspace")
+
+      {:error, _error} ->
+        conn
+        |> put_flash(:error, "An error occurred while updating the member role.")
         |> redirect(to: ~p"/workspace")
     end
   end

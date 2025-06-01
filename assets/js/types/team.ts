@@ -9,7 +9,7 @@ type TeamMember = {
   id: string
   name: string
   role: Role
-  can_remove: boolean
+  can_manage: boolean
 }
 
 type InvitationSent = {

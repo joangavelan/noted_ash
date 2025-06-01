@@ -22,7 +22,7 @@ defmodule NotedWeb.Serializers do
       id: member.id,
       name: member.user.name,
       role: member.role,
-      can_remove: member.can_remove_team_member
+      can_manage: member.can_manage
     }
   end
 

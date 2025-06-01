@@ -26,6 +26,11 @@ defmodule Noted.Workspace.TeamMember do
       accept [:user_id, :role]
     end
 
+    update :change_member_role do
+      accept [:role]
+      validate one_of(:role, [:admin, :member])
+    end
+
     destroy :remove_team_member
 
     destroy :leave_team do
@@ -60,10 +65,12 @@ defmodule Noted.Workspace.TeamMember do
       authorize_if relates_to_actor_via([:team, :users])
     end
 
-    policy action(:remove_team_member) do
-      authorize_if expr(user_id != ^actor(:id))
-      authorize_if actor_attribute_equals(:role, "admin")
-      authorize_if relates_to_actor_via([:team, :users])
+    policy action([:remove_team_member, :change_member_role]) do
+      authorize_if expr(
+                     ^actor(:role) == "admin" and
+                       user_id != ^actor(:id) and
+                       exists(team, users.id == ^actor(:id))
+                   )
     end
 
     policy action(:leave_team) do
@@ -101,9 +108,13 @@ defmodule Noted.Workspace.TeamMember do
   end
 
   calculations do
-    calculate :can_remove_team_member,
+    calculate :can_manage,
               :boolean,
-              expr(^actor(:role) == "admin" and user_id != ^actor(:id))
+              expr(
+                ^actor(:role) == "admin" and
+                  user_id != ^actor(:id) and
+                  exists(team, users.id == ^actor(:id))
+              )
   end
 
   identities do
