@@ -84,6 +84,6 @@ export function UserSearchResults({ search, setSearch }: Props) {
 
 function Container({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-base-200 absolute left-0 top-full mt-4 w-full rounded-sm">{children}</div>
+    <div className="bg-base-200 absolute z-50 left-0 top-full mt-4 w-full rounded-sm">{children}</div>
   )
 }
