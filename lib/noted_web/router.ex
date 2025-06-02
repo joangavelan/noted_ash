@@ -57,7 +57,7 @@ defmodule NotedWeb.Router do
       :browser,
       :require_authenticated_user,
       :ensure_tenant,
-      :load_user_role,
+      :load_user_membership_data,
       :set_permissions
     ]
 
@@ -69,6 +69,7 @@ defmodule NotedWeb.Router do
     delete "/remove-team-member", WorkspaceController, :remove_team_member
     delete "/leave-team", WorkspaceController, :leave_team
     delete "/delete-team", WorkspaceController, :delete_team
+    resources "/notes", NotesController, except: [:index, :show]
   end
 
   scope "/", NotedWeb do

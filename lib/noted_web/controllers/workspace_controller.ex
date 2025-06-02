@@ -45,9 +45,12 @@ defmodule NotedWeb.WorkspaceController do
 
     invitations_sent = Workspace.list_invitations_sent!(actor: current_user, tenant: current_team)
 
+    notes = Workspace.list_notes!(actor: current_user, tenant: current_team)
+
     conn
     |> assign_prop(:team_members, serialize_team_members(team_members))
     |> assign_prop(:invitations_sent, serialize_invitations_sent(invitations_sent))
+    |> assign_prop(:notes, serialize_listed_notes(notes))
     |> render_inertia("Workspace")
   end
 

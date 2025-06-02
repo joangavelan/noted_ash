@@ -5,8 +5,8 @@ defmodule NotedWeb.Serializers do
 
   def serialize_user(_), do: nil
 
-  def serialize_user_with_role(user) when is_map(user) do
-    Map.take(user, [:id, :name, :email, :picture, :role])
+  def serialize_user_with_membership(user) when is_map(user) do
+    Map.take(user, [:id, :name, :email, :picture, :role, :membership_id])
   end
 
   def serialize_team(team) when is_map(team) do
@@ -59,5 +59,17 @@ defmodule NotedWeb.Serializers do
 
   def serialize_invitations_received(invitations) when is_list(invitations) do
     Enum.map(invitations, &serialize_invitation_received/1)
+  end
+
+  def serialize_listed_note(note) when is_map(note) do
+    Map.take(note, [:id, :title, :content, :author, :can_update, :can_destroy])
+  end
+
+  def serialize_listed_notes(notes) when is_list(notes) do
+    Enum.map(notes, &serialize_listed_note/1)
+  end
+
+  def serialize_note_for_editing(note) when is_map(note) do
+    Map.take(note, [:id, :title, :content])
   end
 end

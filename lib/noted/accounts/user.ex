@@ -304,6 +304,7 @@ defmodule Noted.Accounts.User do
 
   calculations do
     calculate :role, :string, expr(team_membership.role)
+    calculate :membership_id, :string, expr(team_membership.id)
 
     calculate :membership_status,
               :string,

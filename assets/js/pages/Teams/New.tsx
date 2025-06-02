@@ -14,7 +14,7 @@ export default function NewTeam() {
 
   return (
     <Layout title="New team">
-      <Back />
+      <Back href="/portal" destination="Portal" />
 
       <h1>New Team</h1>
 

@@ -1,9 +1,14 @@
 import { Link } from "@inertiajs/react"
 
-export function Back() {
+interface Props {
+  href: string
+  destination: string
+}
+
+export function Back({ href, destination }: Props) {
   return (
-    <Link href="/portal" className="link">
-      Go back to portal
+    <Link href={href} className="link">
+      Go back to {destination}
     </Link>
   )
 }

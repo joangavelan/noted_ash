@@ -29,5 +29,13 @@ defmodule Noted.Workspace do
     end
 
     resource Noted.Workspace.Role
+
+    resource Noted.Workspace.Note do
+      define :list_notes
+      define :create_note
+      define :get_note, action: :read, get_by: :id
+      define :update_note, action: :update
+      define :delete_note, action: :destroy
+    end
   end
 end

@@ -23,14 +23,16 @@ defmodule NotedWeb.TenantAuth do
     end
   end
 
-  def load_user_role(conn, _opts) do
+  def load_user_membership_data(conn, _opts) do
     current_team = conn.assigns.current_team
     current_user = conn.assigns.current_user
-    current_user_with_role = Ash.load!(current_user, [:role], tenant: current_team)
+
+    current_user_with_membership =
+      Ash.load!(current_user, [:role, :membership_id], tenant: current_team)
 
     conn
-    |> assign(:current_user, current_user_with_role)
-    |> assign_prop(:current_user, serialize_user_with_role(current_user_with_role))
+    |> assign(:current_user, current_user_with_membership)
+    |> assign_prop(:current_user, serialize_user_with_membership(current_user_with_membership))
   end
 
   def set_permissions(conn, _opts) do
