@@ -3,6 +3,7 @@ defmodule Noted.Workspace.TeamMember do
     otp_app: :noted,
     domain: Noted.Workspace,
     authorizers: [Ash.Policy.Authorizer],
+    notifiers: [Ash.Notifier.PubSub],
     data_layer: AshPostgres.DataLayer
 
   postgres do
@@ -58,6 +59,22 @@ defmodule Noted.Workspace.TeamMember do
                {:ok, team_member}
              end)
     end
+
+    action :is_member?, :boolean do
+      argument :user_id, :string
+
+      run fn input, context ->
+        require Ash.Query
+
+        exists =
+          Noted.Workspace.TeamMember
+          |> Ash.Query.set_tenant(context.tenant)
+          |> Ash.Query.filter(user_id == ^input.arguments.user_id)
+          |> Ash.exists?(authorize?: false)
+
+        {:ok, exists}
+      end
+    end
   end
 
   policies do
@@ -76,6 +93,16 @@ defmodule Noted.Workspace.TeamMember do
     policy action(:leave_team) do
       authorize_if expr(user_id == ^actor(:id))
     end
+  end
+
+  pub_sub do
+    module NotedWeb.Endpoint
+
+    publish_all :create, ["members", :_tenant]
+    publish_all :update, ["members", :_tenant]
+    publish_all :destroy, ["members", :_tenant]
+
+    publish :remove_team_member, ["members", :user_id]
   end
 
   multitenancy do

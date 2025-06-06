@@ -3,6 +3,7 @@ defmodule Noted.Workspace.Team do
     otp_app: :noted,
     domain: Noted.Workspace,
     authorizers: [Ash.Policy.Authorizer],
+    notifiers: [Ash.Notifier.PubSub],
     data_layer: AshPostgres.DataLayer
 
   postgres do
@@ -52,6 +53,12 @@ defmodule Noted.Workspace.Team do
     policy action_type(:destroy) do
       authorize_if expr(^actor(:role) == "admin" and exists(users, id == ^actor(:id)))
     end
+  end
+
+  pub_sub do
+    module NotedWeb.Endpoint
+
+    publish_all :destroy, ["members", :_pkey]
   end
 
   attributes do

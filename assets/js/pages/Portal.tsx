@@ -1,9 +1,12 @@
 import { AcceptInvitationButton } from "@/components/AcceptInvitationButton"
 import { DeclineInvitationButton } from "@/components/DeclineInvitationButton"
+import { useChannel } from "@/hooks/useChannel"
+import { useSocket } from "@/hooks/useSocket"
 import { useUser } from "@/hooks/useUser"
 import { Layout } from "@/layouts/Layout"
 import { InvitationReceived, Team } from "@/types/team"
-import { Link } from "@inertiajs/react"
+import { Link, router } from "@inertiajs/react"
+import * as React from "react"
 
 interface Props {
   teams: Team[]
@@ -12,6 +15,21 @@ interface Props {
 
 export default function Portal({ teams, invitations }: Props) {
   const { user } = useUser()
+
+  const socket = useSocket()
+  const channel = useChannel(socket, `user:${user?.id}`)
+
+  React.useEffect(() => {
+    if (!channel) return
+
+    channel.on("invitations", () => {
+      router.reload({ only: ["invitations"] })
+    })
+
+    channel.on("removed_from_team", () => {
+      router.reload({ only: ["teams"] })
+    })
+  }, [channel])
 
   return (
     <Layout title="Portal">

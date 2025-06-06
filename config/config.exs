@@ -18,6 +18,8 @@ config :ash,
   read_action_after_action_hooks_in_order?: true,
   bulk_actions_default_to_errors?: true
 
+config :ash, :pub_sub, debug?: true
+
 config :spark,
   formatter: [
     remove_parens?: true,

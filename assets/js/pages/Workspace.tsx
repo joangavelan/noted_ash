@@ -6,11 +6,14 @@ import { DeleteTeamButton } from "@/components/DeleteTeamButton"
 import { InviteUserInput } from "@/components/InviteUserInput"
 import { LeaveTeamButton } from "@/components/LeaveTeamButton"
 import { RemoveTeamMemberButton } from "@/components/RemoveTeamMemberButton"
+import { useChannel } from "@/hooks/useChannel"
 import { usePermissions } from "@/hooks/usePermissions"
+import { useSocket } from "@/hooks/useSocket"
 import { Layout } from "@/layouts/Layout"
 import { Note } from "@/types/note"
 import type { InvitationSent, Team, TeamMember } from "@/types/team"
-import { Link } from "@inertiajs/react"
+import { Link, router } from "@inertiajs/react"
+import * as React from "react"
 
 interface Props {
   current_team: Team
@@ -21,6 +24,25 @@ interface Props {
 
 export default function Workspace({ current_team, team_members, invitations_sent, notes }: Props) {
   const { can_invite_user, can_delete_team } = usePermissions()
+
+  const socket = useSocket()
+  const channel = useChannel(socket, `workspace:${current_team.id}`)
+
+  React.useEffect(() => {
+    if (!channel) return
+
+    channel.on("notes", () => {
+      router.reload({ only: ["notes"] })
+    })
+
+    channel.on("invitations", () => {
+      router.reload({ only: ["invitations_sent"] })
+    })
+
+    channel.on("members", () => {
+      router.reload()
+    })
+  }, [channel])
 
   return (
     <Layout title={`${current_team.name} Team`}>
@@ -93,7 +115,7 @@ export default function Workspace({ current_team, team_members, invitations_sent
                 <div className="card-body">
                   <h2 className="card-title">{title}</h2>
                   <p>{content}</p>
-                  <p className="text-sm label">- {author}</p>
+                  <p className="label text-sm">- {author}</p>
                   <div className="card-actions justify-end">
                     {can_update && (
                       <Link href={`/workspace/notes/${id}/edit`} className="btn btn-sm">

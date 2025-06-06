@@ -3,6 +3,7 @@ defmodule Noted.Workspace.Invitation do
     otp_app: :noted,
     domain: Noted.Workspace,
     authorizers: [Ash.Policy.Authorizer],
+    notifiers: [Ash.Notifier.PubSub],
     data_layer: AshPostgres.DataLayer
 
   postgres do
@@ -71,6 +72,16 @@ defmodule Noted.Workspace.Invitation do
     policy action([:list_invitations_sent, :invite_user, :cancel_invitation]) do
       authorize_if actor_attribute_equals(:role, "admin")
     end
+  end
+
+  pub_sub do
+    module NotedWeb.Endpoint
+
+    publish_all :create, ["invitations", :_tenant]
+    publish_all :destroy, ["invitations", :_tenant]
+
+    publish_all :create, ["invitations", :invited_user_id]
+    publish_all :destroy, ["invitations", :invited_user_id]
   end
 
   multitenancy do

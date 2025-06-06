@@ -38,6 +38,15 @@ defmodule NotedWeb.UserAuth do
     end
   end
 
+  def put_user_token(conn, _opts) do
+    if current_user = conn.assigns[:current_user] do
+      token = Phoenix.Token.sign(conn, "user salt", current_user.id)
+      assign(conn, :user_token, token)
+    else
+      conn
+    end
+  end
+
   def redirect_if_user_is_authenticated(conn, _opts) do
     if conn.assigns[:current_user] do
       conn

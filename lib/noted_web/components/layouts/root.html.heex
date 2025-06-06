@@ -11,5 +11,9 @@
   </head>
   <body>
     {@inner_content}
+
+    <script>
+      window.userToken = "<%= assigns[:user_token] %>";
+    </script>
   </body>
 </html>

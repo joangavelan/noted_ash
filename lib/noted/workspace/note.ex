@@ -3,6 +3,7 @@ defmodule Noted.Workspace.Note do
     otp_app: :noted,
     domain: Noted.Workspace,
     authorizers: [Ash.Policy.Authorizer],
+    notifiers: [Ash.Notifier.PubSub],
     data_layer: AshPostgres.DataLayer
 
   postgres do
@@ -45,6 +46,14 @@ defmodule Noted.Workspace.Note do
       authorize_if relates_to_actor_via([:team_member, :user])
       authorize_if actor_attribute_equals(:role, "admin")
     end
+  end
+
+  pub_sub do
+    module NotedWeb.Endpoint
+
+    publish_all :create, ["notes", :_tenant]
+    publish_all :update, ["notes", :_tenant]
+    publish_all :destroy, ["notes", :_tenant]
   end
 
   multitenancy do

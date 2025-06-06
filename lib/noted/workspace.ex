@@ -26,6 +26,7 @@ defmodule Noted.Workspace do
       define :leave_team
       define :get_member, action: :read, get_by: [:user_id, :team_id]
       define :change_member_role
+      define :is_member?, args: [:user_id]
     end
 
     resource Noted.Workspace.Role
