@@ -61,7 +61,10 @@ defmodule Noted.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
-      {:inertia, "~> 2.4.0"}
+      {:inertia, "~> 2.4.0"},
+      # On OTP 28 you'll encouter error `Compilation error in file lib/inflex/pluralize.ex`
+      # See https://github.com/nurugger07/inflex/issues/98 and https://github.com/nurugger07/inflex/pull/99
+      {:inflex, github: "warmwaffles/inflex", branch: "master", override: true}
     ]
   end
 

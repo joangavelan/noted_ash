@@ -51,6 +51,20 @@ npm install
 cd ..
 ```
 
+### Database
+
+```shell
+$ docker pull postgres:16-bookworm
+
+$ docker volume create pgdata_noted_ash
+$ docker volume inspect pgdata_noted_ash
+
+$ docker run --name psql_noted_ash -p 5481:5432 \
+-e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres \
+-v pgdata_noted_ash:/var/lib/postgresql/data \
+-d postgres:16-bookworm
+```
+
 ### Configure Environment Variables
 
 The application requires environment variables for Google OAuth2 authentication. Create a file named `.env` in the project root and add the following variables:
@@ -77,6 +91,24 @@ config :noted, Noted.Repo,
   database: "noted_dev",
 ```
 
+### Upgrade to be OTP 28 and above compatible
+
+```shell
+mix deps.update inflex # will only work after editing the `mix.exs` file
+mix deps.compile inflex --force
+mix deps.update igniter
+mix deps.compile igniter --force
+mix deps.update ash_postgres
+mix deps.compile ash_postgres --force
+
+
+mix deps.update ash_authentication_phoenix
+mix deps.update ash_authentication
+mix deps.update ash_postgres
+mix deps.update ash_phoenix
+mix deps.compile
+```
+
 ### Create and Migrate the Database
 
 Set up the database by running:
@@ -90,8 +122,16 @@ mix ecto.migrate
 
 Start the Phoenix server while loading the `.env` file:
 
-```bash
-source .env && mix phx.server
+```shell
+source .env && iex -S mix phx.server
+```
+
+Validate if loading all env variables is OK
+
+```shell
+Application.get_env(:noted, :google_client_id)
+Application.get_env(:noted, :google_client_secret)
+Application.get_env(:noted, :google_redirect_uri)
 ```
 
 The `source .env` command ensures your environment variables are loaded, and `mix phx.server` starts the application. The app will be accessible at [http://localhost:4000](http://localhost:4000).
