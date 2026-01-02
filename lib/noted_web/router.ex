@@ -33,6 +33,10 @@ defmodule NotedWeb.Router do
     put "/confirm-new-user/:token", UserConfirmationController, :update
     get "/confirm-new-user", UserConfirmationController, :new
     post "/confirm-new-user", UserConfirmationController, :create
+    get "/password-reset/:token", UserPasswordResetController, :edit
+    put "/password-reset/:token", UserPasswordResetController, :update
+    get "/password-reset", UserPasswordResetController, :new
+    post "/password-reset", UserPasswordResetController, :create
   end
 
   scope "/auth", NotedWeb do
