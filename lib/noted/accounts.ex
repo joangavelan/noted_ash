@@ -28,4 +28,20 @@ defmodule Noted.Accounts do
     |> AshAuthentication.Info.strategy!(:confirm_new_user)
     |> AshAuthentication.AddOn.Confirmation.confirmation_token(changeset, user)
   end
+
+  def request_password_reset(email) do
+    Noted.Accounts.User
+    |> AshAuthentication.Info.strategy!(:password)
+    |> AshAuthentication.Strategy.Password.Actions.reset_request(%{"email" => email}, [])
+  end
+
+  def reset_password(token, password, password_confirmation) do
+    Noted.Accounts.User
+    |> AshAuthentication.Info.strategy!(:password)
+    |> AshAuthentication.Strategy.Password.Actions.reset(%{
+      "reset_token" => token,
+      "password" => password,
+      "password_confirmation" => password_confirmation
+    }, [])
+  end
 end
