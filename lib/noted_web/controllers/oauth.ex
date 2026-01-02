@@ -5,14 +5,16 @@ defmodule NotedWeb.OAuth2Controller do
   alias NotedWeb.UserAuth
   alias Noted.Accounts
 
-  @config [
-    client_id: System.get_env("GOOGLE_CLIENT_ID"),
-    client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
-    redirect_uri: System.get_env("GOOGLE_REDIRECT_URI")
-  ]
+  defp config do
+    [
+      client_id: Application.get_env(:noted, :google_client_id),
+      client_secret: Application.get_env(:noted, :google_client_secret),
+      redirect_uri: Application.get_env(:noted, :google_redirect_uri)
+    ]
+  end
 
   def request(conn, %{"provider" => "google"}) do
-    @config
+    config()
     |> Google.authorize_url()
     |> case do
       {:ok, %{url: url, session_params: session_params}} ->
@@ -29,7 +31,7 @@ defmodule NotedWeb.OAuth2Controller do
 
   def callback(conn, %{"provider" => "google"} = params) do
     session_params = get_session(conn, :session_params)
-    config = Keyword.put(@config, :session_params, session_params)
+    config = Keyword.put(config(), :session_params, session_params)
 
     with {:ok, credentials} <- Google.callback(config, params),
          {:ok, user} <-
