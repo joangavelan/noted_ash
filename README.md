@@ -54,7 +54,7 @@ cd ..
 ### Database
 
 ```shell
-$ docker pull postgres:16-bookworm
+$ docker pull postgres:17-bookworm
 
 $ docker volume create pgdata_noted_ash
 $ docker volume inspect pgdata_noted_ash
@@ -62,7 +62,7 @@ $ docker volume inspect pgdata_noted_ash
 $ docker run --name psql_noted_ash -p 5481:5432 \
 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres \
 -v pgdata_noted_ash:/var/lib/postgresql/data \
--d postgres:16-bookworm
+-d postgres:17-bookworm
 ```
 
 ### Configure Environment Variables
@@ -106,6 +106,7 @@ mix deps.update ash_authentication_phoenix
 mix deps.update ash_authentication
 mix deps.update ash_postgres
 mix deps.update ash_phoenix
+mix deps.get
 mix deps.compile
 ```
 
